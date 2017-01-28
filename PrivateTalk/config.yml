@@ -1,0 +1,8 @@
+# PrivateTalk v1.0 configuration file
+
+#   %CONVERSATION% = Name of conversation they are in
+#   %PLAYER% = Player's name
+#   &MESSAGE% = Player's message
+party-message-format: "&d[%CONVERSATION%] &7%PLAYER% ≫ &d%MESSAGE%"
+
+

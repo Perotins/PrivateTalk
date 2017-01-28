@@ -1,0 +1,10 @@
+name: PrivateTalk
+author: Perotin
+version: 1.0
+main: me.perotin.privatetalk.PrivateTalk
+commands:
+   pt:
+      usage: /pt
+      description: Base command for PrivateTalk
+   privatetalk:
+      usage: /privatetalk
