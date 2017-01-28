@@ -1,2 +1,2 @@
 # PrivateTalk
-# PrivateTalk
+# All rights reserved. 
