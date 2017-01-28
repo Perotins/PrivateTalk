@@ -98,9 +98,13 @@ public class PrivateTalkCMD implements CommandExecutor {
 					p.sendMessage(ChatColor.RED + "No permission to do this!");
 					return true;
 				}else{
+					if(p.getName().equalsIgnoreCase(t.getName())){
+						p.sendMessage(ChatColor.RED + "You cannot promote yourself!");
+						return true;
+					}
 					c.setOwner(t);
 					for(Player r : c.getMembers()){
-						r.sendMessage(ChatColor.RED + p.getName() + ChatColor.YELLOW + " has made " + ChatColor.GREEN + t.getName() + ChatColor.YELLOW + " the new owner of " + ChatColor.GREEN + c.getName());
+						r.sendMessage(ChatColor.RED + p.getName() + ChatColor.YELLOW + " has made " + ChatColor.GREEN + t.getName() + ChatColor.YELLOW + " the new owner of " + ChatColor.GREEN + c.getName()+ChatColor.YELLOW + "!");
 					}
 				}
 			}
@@ -126,12 +130,12 @@ public class PrivateTalkCMD implements CommandExecutor {
 					p.sendMessage(ChatColor.YELLOW + "You are not in any chats!");
 					return true;
 				}else{
-					if(PrivateTalk.priv.toggle.containsKey(p)){
-						PrivateTalk.priv.toggle.remove(p);
+					if(PrivateTalk.priv.toggle.containsKey(p.getUniqueId().toString())){
+						PrivateTalk.priv.toggle.remove(p.getUniqueId().toString());
 						p.sendMessage(ChatColor.YELLOW + "Toggle chat set to " + ChatColor.RED + "off");
 						return true;
 					}else{
-						PrivateTalk.priv.toggle.put(p, c);
+						PrivateTalk.priv.toggle.put(p.getUniqueId().toString(), c);
 						p.sendMessage(ChatColor.YELLOW + "Toggle chat set to " + ChatColor.GREEN + "on");
 						return true;
 
@@ -227,7 +231,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 					}else if(new Conversation().getConversation(p).getOwner().getName() != p.getName()){
 						p.sendMessage(ChatColor.RED + "No permission to do this!");
 						return true;
-						
+
 					}else{
 						p.sendMessage(ChatColor.YELLOW + "Successfully deleted!");
 						for(Player t : new Conversation().getConversation(p).getMembers()){
@@ -236,10 +240,10 @@ public class PrivateTalkCMD implements CommandExecutor {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(PrivateTalk.priv, new Runnable(){
 
 							@Override
-						public void run() {
+							public void run() {
 								new Conversation().getConversation(p).delete();
 								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pt delete " + new Conversation().getConversation(p).getName());							}
-							
+
 						}, 20);
 					}
 				}
@@ -251,7 +255,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 					}else{
 						for(Player t: c.getMembers()){
 							t.sendMessage(ChatColor.RED + "Your conversation is being deleted!");
-							
+
 						}
 						p.sendMessage(ChatColor.YELLOW + "Successfully deleted " + ChatColor.RED + c.getName());
 						c.delete();
@@ -265,7 +269,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 						for(Player t: c.getMembers()){
 							t.sendMessage(ChatColor.RED + "Your conversation is being deleted!");
 							c.remove(t);
-							
+
 						}
 						p.sendMessage(ChatColor.YELLOW + "Successfully deleted " + ChatColor.RED + c.getName());
 						c.delete();

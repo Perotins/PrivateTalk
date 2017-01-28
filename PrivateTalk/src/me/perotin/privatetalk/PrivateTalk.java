@@ -3,7 +3,6 @@ package me.perotin.privatetalk;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,18 +18,24 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 
 
 	/*
-	 * TODO list
+	 * 
 	 */
 	public static PrivateTalk priv;
 
-	public HashMap<Player, Conversation>toggle = new HashMap<>();
+	public HashMap<String, Conversation>toggle = new HashMap<>();
 
-	public ArrayList<Conversation>convos;
-
-	public HashSet<Player>toRemove = new HashSet<>();
+	 
+	 public ArrayList<Conversation>convos;
+	 Integer timeToKick = getConfig().getInt("time-to-join-back");
+	 HashMap<String, Conversation>toRemove = new HashMap<>();
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable(){
+		if(timeToKick == null || timeToKick < 1){
+			getLogger().severe("Config is not set up properly! Make sure you insert a positive digit in (time-to-join-back)");
+			timeToKick = 5;
+		}
+		
 		convos = new ArrayList<>();
 		priv = this;
 		getCommand("pt").setExecutor(new PrivateTalkCMD());
@@ -45,13 +50,12 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 			public void run() {
 				for(Conversation c : convos){
 					if(c.getMembers().size() == 0){
-						Bukkit.broadcastMessage("deleted " + c.getName());
 						c.delete();
 					}
 				}
 			}
 			
-		}, 0, 20*20);
+		}, 0, 20*60*10);
 
 
 	}
@@ -59,7 +63,7 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 		if(!new File(getDataFolder(), "config.yml").exists()){
 			saveDefaultConfig();
 		}else{
-			saveConfig();
+			return;
 		}
 	}
 
@@ -70,8 +74,8 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 
 			@Override
 			public void run() {
-				if (toRemove.contains(p)) {
-					toRemove.remove(p);
+				if (toRemove.containsKey(p.getUniqueId().toString())) {
+					toRemove.remove(p.getUniqueId().toString());
 					p.sendMessage("joined in time");
 				}else{
 					p.sendMessage("fired1");
@@ -90,23 +94,24 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 		for(Conversation c : convos){
 			if(!c.playerInConversation(p))return;
 			else{
-				toRemove.add(p);
-				Bukkit.broadcastMessage(toRemove.contains(p) + " .");
+				
+				toRemove.put(p.getUniqueId().toString(), c);
+				Bukkit.broadcastMessage(toRemove.containsKey(p) + ".");
 				Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
 
 					@Override
 					public void run() {
-						if (toRemove.contains(p)) {
+						if (toRemove.containsKey(p.getUniqueId().toString())) {
 							if (new Conversation().getConversation(p).playerInConversation(p)) {
 								toRemove.remove(p);
-								Bukkit.getPluginManager().callEvent(new PlayerLeaveConversationEvent(p, new Conversation().getConversation(p)));
-								new Conversation().getConversation(p).remove(p);
+								Bukkit.getPluginManager().callEvent(new PlayerLeaveConversationEvent(p, toRemove.get(p)));
+								c.remove(p);
 								Bukkit.broadcastMessage("removed offline player"); 
 							}
 						}
 					}
 
-				}, 20*60*5);
+				}, 20* 60*0);
 			}
 		}
 	}

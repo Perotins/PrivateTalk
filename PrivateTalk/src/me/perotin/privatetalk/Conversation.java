@@ -2,15 +2,17 @@ package me.perotin.privatetalk;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Conversation {
 	
-	ArrayList<Player>members = new ArrayList<>();
-	Player owner;
-	String name;
-	Boolean isPublic;
+	private ArrayList<UUID>members = new ArrayList<>();
+	private Player owner;
+	private String name;
+	private Boolean isPublic;
 	public Conversation(){
 		
 	}
@@ -29,7 +31,12 @@ public class Conversation {
 		return isPublic;
 	}
 	public List<Player> getMembers(){
-		return members;
+		for(UUID s : members){
+			ArrayList<Player>members = new ArrayList<>();
+			members.add(Bukkit.getPlayer(s));
+			return members;
+		}
+		return null;
 	}
 	public void delete(){
 		for(Player p : getMembers()){
@@ -63,10 +70,10 @@ public class Conversation {
 		return null;
 	}
 	public void add(Player p){
-		getMembers().add(p);
+		members.add(p.getUniqueId());
 	}
 	public void remove(Player p){
-		getMembers().remove(p);
+		members.remove(p.getUniqueId());
 	}
 	public Conversation getConversation(String convo){
 		for(Conversation con : PrivateTalk.priv.convos){
