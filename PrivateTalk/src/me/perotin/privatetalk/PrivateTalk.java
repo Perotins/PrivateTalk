@@ -1,6 +1,5 @@
 package me.perotin.privatetalk;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,25 +20,22 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 
 	public HashMap<String, Conversation> toggle = new HashMap<>();
 	private HashMap<String, Conversation> toRemove = new HashMap<>();
-	public ArrayList<Conversation> convos;
 
-	private int timeToKick = getConfig().getInt("time-to-join-back");
+	public ArrayList<Conversation> convos = new ArrayList<>();
+
+	private int timeToKick;
 
 	@Override
 	public void onEnable() {
 		instance = this;
+		
+		// Load all data when the plugin loads
+		reload();
 
-		if (timeToKick < 1) {
-			getLogger().severe("Config is not set up properly! Make sure you insert a positive digit in (time-to-join-back)");
-			timeToKick = 5;
-		}
-
-		convos = new ArrayList<>();
 		getCommand("privatetalk").setExecutor(new CommandPrivateTalk());
 		Bukkit.getPluginManager().registerEvents(new Speak(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerQuitConvo(), this);
 		Bukkit.getPluginManager().registerEvents(this, this);
-		saveConfig();
 
 		new BukkitRunnable() {
 
@@ -61,12 +57,20 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 		instance = null;
 	}
 
-	public void saveConfig() {
-		if (!new File(getDataFolder(), "config.yml").exists()) {
-			saveDefaultConfig();
-		} else {
-			return;
+	private void reload() {
+		// Ensure the config file is saved to the plugins folder
+		saveDefaultConfig();
+
+		// Refresh from disk
+		reloadConfig();
+
+		timeToKick = getConfig().getInt("time-to-join-back");
+
+		if (timeToKick < 1) {
+			getLogger().severe("Config is not set up properly! Make sure you insert a positive digit in (time-to-join-back)");
+			timeToKick = 5;
 		}
+
 	}
 
 	@EventHandler
