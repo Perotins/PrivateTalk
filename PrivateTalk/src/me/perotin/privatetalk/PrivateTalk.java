@@ -60,6 +60,11 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 
 
 	}
+	
+	@Override
+	public void onDisable() {
+		instance = null;
+	}
 	public void saveConfig(){
 		if(!new File(getDataFolder(), "config.yml").exists()){
 			saveDefaultConfig();
