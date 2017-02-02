@@ -48,7 +48,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 				}
 			}
 
-		}.runTaskTimerAsynchronously(this, 0, 20 * 60 * 10);
+		}.runTaskTimer(this, 0, 20 * 60 * 10);
 
 	}
 
