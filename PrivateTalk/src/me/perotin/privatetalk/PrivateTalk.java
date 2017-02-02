@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.perotin.privatetalk.commands.PrivateTalkCMD;
 
@@ -22,14 +23,13 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 	private HashMap<String, Conversation> toRemove = new HashMap<>();
 	public ArrayList<Conversation> convos;
 
-	private Integer timeToKick = getConfig().getInt("time-to-join-back");
+	private int timeToKick = getConfig().getInt("time-to-join-back");
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onEnable(){
+	public void onEnable() {
 		instance = this;
 		
-		if(timeToKick == null || timeToKick < 1){
+		if (timeToKick < 1){
 			getLogger().severe("Config is not set up properly! Make sure you insert a positive digit in (time-to-join-back)");
 			timeToKick = 5;
 		}
@@ -41,7 +41,8 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 		Bukkit.getPluginManager().registerEvents(new PlayerQuitConvo(), this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 		saveConfig();
-		Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable(){
+		
+		new BukkitRunnable() {
 
 			@Override
 			public void run() {
@@ -52,7 +53,7 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 				}
 			}
 			
-		}, 0, 20*60*10);
+		}.runTaskTimerAsynchronously(this, 0, 20*60*10);
 
 
 	}
