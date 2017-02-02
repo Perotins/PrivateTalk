@@ -9,31 +9,32 @@ import org.bukkit.event.Listener;
 
 public class PlayerQuitConvo implements Listener {
 
-
 	@EventHandler
-	public void quitConvo(PlayerLeaveConversationEvent e){
+	public void quitConvo(PlayerLeaveConversationEvent e) {
 		Conversation c = e.getConversation();
-		if(c == null){
+		if (c == null) {
 			return;
 		}
-		
-		if(c.getMembers() == null){
+
+		if (c.getMembers() == null) {
 			c.delete();
 			c = null;
 
 			e.getPlayer().sendMessage("FIRED");
 			return;
-		}else{
-			Player owner =  e.getPlayer();
+		} else {
+			Player owner = e.getPlayer();
 			owner.sendMessage("fired");
-			// player leaving is owner, making a random player the new owner
-			if(c.getOwner().getName().equals(owner.getName()) && c.size() > 1){
+			// player leaving is owner, making a random player the
+			// new owner
+			if (c.getOwner().getName().equals(owner.getName()) && c.size() > 1) {
 				int random = new Random().nextInt(c.getMembers().size());
 				Player newOwner = c.getMembers().get(random);
 				c.setOwner(newOwner);
-				newOwner.sendMessage(ChatColor.GREEN + owner.getName() + ChatColor.YELLOW + " has left, giving you ownership of "+ChatColor.GREEN+ c.getName());			}
+				newOwner.sendMessage(ChatColor.GREEN + owner.getName() + ChatColor.YELLOW + " has left, giving you ownership of " + ChatColor.GREEN + c.getName());
+			}
 			return;
-		
+
 		}
 
 	}
