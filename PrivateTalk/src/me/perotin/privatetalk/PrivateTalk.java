@@ -16,18 +16,14 @@ import me.perotin.privatetalk.commands.PrivateTalkCMD;
 
 public class PrivateTalk extends JavaPlugin implements Listener{
 
-
-	/*
-	 * 
-	 */
 	public static PrivateTalk instance;
 
-	public HashMap<String, Conversation>toggle = new HashMap<>();
+	public HashMap<String, Conversation> toggle = new HashMap<>();
+	private HashMap<String, Conversation> toRemove = new HashMap<>();
+	public ArrayList<Conversation> convos;
 
-	 
-	 public ArrayList<Conversation>convos;
-	 Integer timeToKick = getConfig().getInt("time-to-join-back");
-	 HashMap<String, Conversation>toRemove = new HashMap<>();
+	private Integer timeToKick = getConfig().getInt("time-to-join-back");
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable(){
