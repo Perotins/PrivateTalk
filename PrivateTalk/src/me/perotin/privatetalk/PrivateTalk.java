@@ -102,7 +102,7 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 					@Override
 					public void run() {
 						if (toRemove.containsKey(p.getUniqueId().toString())) {
-							if (new Conversation().getConversation(p).playerInConversation(p)) {
+							if (Conversation.getConversation(p).playerInConversation(p)) {
 								toRemove.remove(p);
 								Bukkit.getPluginManager().callEvent(new PlayerLeaveConversationEvent(p, toRemove.get(p)));
 								c.remove(p);

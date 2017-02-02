@@ -13,9 +13,6 @@ public class Conversation {
 	private Player owner;
 	private String name;
 	private Boolean isPublic;
-	public Conversation(){
-		
-	}
 	public Conversation(Player owner, String name, Boolean publicC){
 		this.owner = owner;
 		this.name = name;
@@ -55,7 +52,6 @@ public class Conversation {
 	public void setOwner(Player p){
 		owner = p;
 	}
-	
 	public Boolean playerInConversation(Player p){
 			if(getMembers().contains(p)){
 				return true;
@@ -64,9 +60,15 @@ public class Conversation {
 			}
 		
 	}
-	public Conversation getConversation(Player p){
+	public void add(Player p){
+		members.add(p.getUniqueId());
+	}
+	public void remove(Player p){
+		members.remove(p.getUniqueId());
+	}
+	public static Conversation getConversation(Player player){
 		for(Conversation c : PrivateTalk.priv.convos){
-			if(c.playerInConversation(p)){
+			if(c.playerInConversation(player)){
 				return c;
 			}else{
 				return null;
@@ -74,15 +76,9 @@ public class Conversation {
 		}
 		return null;
 	}
-	public void add(Player p){
-		members.add(p.getUniqueId());
-	}
-	public void remove(Player p){
-		members.remove(p.getUniqueId());
-	}
-	public Conversation getConversation(String convo){
+	public static Conversation getConversation(String name){
 		for(Conversation con : PrivateTalk.priv.convos){
-			if(con.getName().equalsIgnoreCase(convo)){
+			if(con.getName().equalsIgnoreCase(name)){
 				return con;
 			}else return null;
 		}

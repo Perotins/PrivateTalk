@@ -83,7 +83,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 				p.sendMessage(ChatColor.RED + "/pt promote <name>");
 				return true;
 			}else{
-				Conversation c = new Conversation().getConversation(p);
+				Conversation c = Conversation.getConversation(p);
 				if(c==null){
 					p.sendMessage(ChatColor.RED + "You are not in a conversation! Please join one before promoting someone!");
 					return true;
@@ -164,7 +164,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 				}
 			}if(args.length == 2){
 				String convoName = args[1];
-				if(new Conversation().getConversation(convoName) != null){
+				if(Conversation.getConversation(convoName) != null){
 					p.sendMessage(ChatColor.RED + "That name already exists! Please choose a different name.");
 					return true;
 				}
@@ -176,7 +176,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 
 			}else if(args.length == 3){
 				String convoName = args[1] + " " + args[2];
-				if(new Conversation().getConversation(convoName) != null){
+				if(Conversation.getConversation(convoName) != null){
 					p.sendMessage(ChatColor.RED + "That name already exists! Please choose a different name.");
 					return true;
 				}
@@ -194,11 +194,11 @@ public class PrivateTalkCMD implements CommandExecutor {
 				return true;
 			}
 			else if(args.length == 2){
-				Conversation toJoin = new Conversation().getConversation(args[1]);
+				Conversation toJoin = Conversation.getConversation(args[1]);
 				if(toJoin == null){
 					p.sendMessage(ChatColor.RED + args[1] +" is not known.");
 					return true;
-				}else if (new Conversation().getConversation(p) != null){
+				}else if (Conversation.getConversation(p) != null){
 					p.sendMessage(ChatColor.RED + "You are currently in a conversation! Please type /pt leave before trying to join one!");
 					return true;
 				}if(toJoin.isPublic() || p.isOp()){
@@ -221,34 +221,34 @@ public class PrivateTalkCMD implements CommandExecutor {
 				p.sendMessage(ChatColor.RED + "/pt delete <optional : name>");
 				return true;
 			}
-			Conversation c2 = new Conversation().getConversation(p);
+			Conversation c2 = Conversation.getConversation(p);
 
 			if(p.hasPermission("pt.delete") || p.isOp() || c2!=null && c2.getOwner().getName().equals(p.getName())){
 				if(args.length == 1){
-					if(new Conversation().getConversation(p) == null){
+					if(Conversation.getConversation(p) == null){
 						p.sendMessage(ChatColor.RED + "Currently you are not in a conversation!");
 						return true;
-					}else if(new Conversation().getConversation(p).getOwner().getName() != p.getName()){
+					}else if(Conversation.getConversation(p).getOwner().getName() != p.getName()){
 						p.sendMessage(ChatColor.RED + "No permission to do this!");
 						return true;
 
 					}else{
 						p.sendMessage(ChatColor.YELLOW + "Successfully deleted!");
-						for(Player t : new Conversation().getConversation(p).getMembers()){
+						for(Player t : Conversation.getConversation(p).getMembers()){
 							t.sendMessage(ChatColor.GREEN + p.getName() + ChatColor.YELLOW + " is closing shop. Come again!");
 						}
 						Bukkit.getScheduler().scheduleSyncDelayedTask(PrivateTalk.priv, new Runnable(){
 
 							@Override
 							public void run() {
-								new Conversation().getConversation(p).delete();
-								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pt delete " + new Conversation().getConversation(p).getName());							}
+							    Conversation.getConversation(p).delete();
+								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pt delete " + Conversation.getConversation(p).getName());							}
 
 						}, 20);
 					}
 				}
 				if(args.length == 2){
-					Conversation c = new Conversation().getConversation(args[1]);
+					Conversation c = Conversation.getConversation(args[1]);
 					if(c == null){
 						p.sendMessage(ChatColor.RED + args[1] + " is not known!");
 						return true;
@@ -261,7 +261,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 						c.delete();
 					}
 				}else if(args.length == 3){
-					Conversation c = new Conversation().getConversation(args[1] + " " + args[2]);
+					Conversation c = Conversation.getConversation(args[1] + " " + args[2]);
 					if(c == null){
 						p.sendMessage(ChatColor.RED + args[1] + " is not known!");
 						return true;
@@ -284,11 +284,11 @@ public class PrivateTalkCMD implements CommandExecutor {
 				p.sendMessage(ChatColor.RED + "/pt public <optional : true/false>");
 				return true;
 			}
-			else if(new Conversation().getConversation(p) == null){
+			else if(Conversation.getConversation(p) == null){
 				p.sendMessage(ChatColor.RED + "You are currently not in a conversation!");
 				return true;
 			}else{
-				Conversation toToggle = new Conversation().getConversation(p);
+				Conversation toToggle = Conversation.getConversation(p);
 				if(toToggle.getOwner().getName().equalsIgnoreCase(p.getName())){
 					Boolean pub = toToggle.isPublic();
 					if(args.length == 1){
@@ -331,7 +331,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 				p.sendMessage(ChatColor.RED + "/pt kick <player>");
 				return true;
 			}
-			Conversation c = new Conversation().getConversation(p);
+			Conversation c = Conversation.getConversation(p);
 			if(c == null){
 				p.sendMessage(ChatColor.RED+ "You are not in any conversations!");
 				return true;
@@ -346,7 +346,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 						p.sendMessage(ChatColor.RED + args[1] + " is not a known player!");
 						return true;
 					}
-					else if(new Conversation().getConversation(toKick).getName() != c.getName()){
+					else if(Conversation.getConversation(toKick).getName() != c.getName()){
 						p.sendMessage(ChatColor.RED + toKick.getName() + " is not in your conversation!");
 						return true;
 					}
@@ -364,16 +364,16 @@ public class PrivateTalkCMD implements CommandExecutor {
 				p.sendMessage(ChatColor.RED + "/pt invite <player>");
 				return true;
 			}
-			if(new Conversation().getConversation(p) == null){
+			if(Conversation.getConversation(p) == null){
 				p.sendMessage(ChatColor.RED + "You're currently not in a conversation! Please join one before inviting someone.");
 				return true;
 			}else{
-				if(new Conversation().getConversation(p).getOwner().getName() != p.getName() && !p.isOp()){
+				if(Conversation.getConversation(p).getOwner().getName() != p.getName() && !p.isOp()){
 					p.sendMessage(ChatColor.RED + "Sorry, but you don't have permission to do this!");
 				}else{
 					@SuppressWarnings("deprecation")
 					Player toInvite = Bukkit.getPlayer(args[1]);
-					Conversation c= new Conversation().getConversation(p);
+					Conversation c= Conversation.getConversation(p);
 					if(toInvite == null){
 						p.sendMessage(ChatColor.RED + args[1] + " could not be found!");
 						return true;
@@ -399,7 +399,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 				return true;
 			}
 			if(args.length == 2){
-				Conversation toInform = new Conversation().getConversation(args[1]);
+				Conversation toInform = Conversation.getConversation(args[1]);
 				if(toInform == null){
 					p.sendMessage(ChatColor.RED + args[1] + " could not be found!");
 
@@ -416,7 +416,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 
 				}
 			}else if(args.length == 3){
-				Conversation toInform = new Conversation().getConversation(args[1] + " " + args[2]);
+				Conversation toInform = Conversation.getConversation(args[1] + " " + args[2]);
 				if(toInform == null){
 					p.sendMessage(ChatColor.RED + args[1] + " " + args[2] + " could not be found!");
 
