@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.perotin.privatetalk.Conversation;
-import me.perotin.privatetalk.PlayerLeaveConversationEvent;
 import me.perotin.privatetalk.PrivateTalk;
+import me.perotin.privatetalk.event.PlayerLeaveConversationEvent;
 
 public class CommandPrivateTalk implements CommandExecutor {
 

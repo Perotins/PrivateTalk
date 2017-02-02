@@ -1,10 +1,13 @@
-package me.perotin.privatetalk;
+package me.perotin.privatetalk.event;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import me.perotin.privatetalk.Conversation;
+import me.perotin.privatetalk.PrivateTalk;
 
 public class Speak implements Listener {
 

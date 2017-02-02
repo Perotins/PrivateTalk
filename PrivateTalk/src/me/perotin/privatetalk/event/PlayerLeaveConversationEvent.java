@@ -1,9 +1,11 @@
-package me.perotin.privatetalk;
+package me.perotin.privatetalk.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
+
+import me.perotin.privatetalk.Conversation;
 
 public class PlayerLeaveConversationEvent extends PlayerEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();

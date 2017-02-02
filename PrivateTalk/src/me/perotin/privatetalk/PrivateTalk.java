@@ -13,6 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.perotin.privatetalk.commands.CommandPrivateTalk;
+import me.perotin.privatetalk.event.PlayerLeaveConversationEvent;
+import me.perotin.privatetalk.event.PlayerQuitConvo;
+import me.perotin.privatetalk.event.Speak;
 
 public class PrivateTalk extends JavaPlugin implements Listener {
 
