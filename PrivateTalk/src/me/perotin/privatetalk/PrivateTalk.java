@@ -20,7 +20,7 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 	/*
 	 * 
 	 */
-	public static PrivateTalk priv;
+	public static PrivateTalk instance;
 
 	public HashMap<String, Conversation>toggle = new HashMap<>();
 
@@ -31,13 +31,14 @@ public class PrivateTalk extends JavaPlugin implements Listener{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable(){
+		instance = this;
+		
 		if(timeToKick == null || timeToKick < 1){
 			getLogger().severe("Config is not set up properly! Make sure you insert a positive digit in (time-to-join-back)");
 			timeToKick = 5;
 		}
 		
 		convos = new ArrayList<>();
-		priv = this;
 		getCommand("pt").setExecutor(new PrivateTalkCMD());
 		getCommand("privatetalk").setExecutor(new PTCatcher());
 		Bukkit.getPluginManager().registerEvents(new Speak(), this);
