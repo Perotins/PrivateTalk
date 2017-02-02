@@ -1,4 +1,4 @@
-![Banner](/branding/banner.png)
+[![Banner](/branding/banner.png)](/)
 
 # PrivateTalk
 
