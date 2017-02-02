@@ -8,81 +8,96 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Conversation {
-	
-	private ArrayList<UUID>members = new ArrayList<>();
+
+	private ArrayList<UUID> members = new ArrayList<>();
 	private Player owner;
 	private String name;
 	private Boolean isPublic;
-	public Conversation(Player owner, String name, Boolean publicC){
+
+	public Conversation(Player owner, String name, Boolean publicC) {
 		this.owner = owner;
 		this.name = name;
 		this.isPublic = publicC;
 	}
-	public Player getOwner(){
+
+	public Player getOwner() {
 		return owner;
 	}
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
-	public int size(){
+
+	public int size() {
 		return members.size();
 	}
-	public Boolean isPublic(){
+
+	public Boolean isPublic() {
 		return isPublic;
 	}
-	public List<Player> getMembers(){
-		for(UUID s : members){
-			ArrayList<Player>members = new ArrayList<>();
+
+	public List<Player> getMembers() {
+		for (UUID s : members) {
+			ArrayList<Player> members = new ArrayList<>();
 			members.add(Bukkit.getPlayer(s));
 			return members;
 		}
 		return null;
 	}
-	public void delete(){
-		if(getMembers() != null){
-			for(Player p : getMembers()){
+
+	public void delete() {
+		if (getMembers() != null) {
+			for (Player p : getMembers()) {
 				getMembers().remove(p);
 			}
 		}
 		PrivateTalk.instance.convos.remove(this);
 	}
-	public void setPublic(Boolean b){
+
+	public void setPublic(Boolean b) {
 		isPublic = b;
 	}
-	public void setOwner(Player p){
+
+	public void setOwner(Player p) {
 		owner = p;
 	}
-	public Boolean playerInConversation(Player p){
-			if(getMembers().contains(p)){
-				return true;
-			}else{
-				return false;
-			}
-		
+
+	public Boolean playerInConversation(Player p) {
+		if (getMembers().contains(p)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
-	public void add(Player p){
+
+	public void add(Player p) {
 		members.add(p.getUniqueId());
 	}
-	public void remove(Player p){
+
+	public void remove(Player p) {
 		members.remove(p.getUniqueId());
 	}
-	public static Conversation getConversation(Player player){
-		for(Conversation c : PrivateTalk.instance.convos){
-			if(c.playerInConversation(player)){
+
+	public static Conversation getConversation(Player player) {
+		for (Conversation c : PrivateTalk.instance.convos) {
+			if (c.playerInConversation(player)) {
 				return c;
-			}else{
+			} else {
 				return null;
 			}
 		}
 		return null;
 	}
-	public static Conversation getConversation(String name){
-		for(Conversation con : PrivateTalk.instance.convos){
-			if(con.getName().equalsIgnoreCase(name)){
+
+	public static Conversation getConversation(String name) {
+		for (Conversation con : PrivateTalk.instance.convos) {
+			if (con.getName().equalsIgnoreCase(name)) {
 				return con;
-			}else return null;
+			} else
+				return null;
 		}
-		
+
 		return null;
 	}
 

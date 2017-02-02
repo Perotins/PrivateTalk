@@ -99,7 +99,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 
 				toRemove.put(p.getUniqueId().toString(), c);
 				Bukkit.broadcastMessage(toRemove.containsKey(p) + ".");
-				Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+				new BukkitRunnable() {
 
 					@Override
 					public void run() {
@@ -113,7 +113,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 						}
 					}
 
-				}, 20 * 60 * 0);
+				}.runTaskLater(this, 1);
 			}
 		}
 	}
