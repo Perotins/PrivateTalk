@@ -73,7 +73,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+		new BukkitRunnable() {
 
 			@Override
 			public void run() {
@@ -86,7 +86,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 
 			}
 
-		}, 20 * 3);
+		}.runTaskLater(this, 20 * 3);
 
 	}
 
@@ -113,7 +113,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 						}
 					}
 
-				}.runTaskLater(this, 1);
+				}.runTaskLater(this, 20 * 60 * 0);
 			}
 		}
 	}

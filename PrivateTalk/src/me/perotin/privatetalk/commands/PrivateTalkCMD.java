@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.perotin.privatetalk.Conversation;
 import me.perotin.privatetalk.PlayerLeaveConversationEvent;
@@ -235,7 +236,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 						for (Player t : Conversation.getConversation(p).getMembers()) {
 							t.sendMessage(ChatColor.GREEN + p.getName() + ChatColor.YELLOW + " is closing shop. Come again!");
 						}
-						Bukkit.getScheduler().scheduleSyncDelayedTask(PrivateTalk.instance, new Runnable() {
+						new BukkitRunnable() {
 
 							@Override
 							public void run() {
@@ -243,7 +244,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pt delete " + Conversation.getConversation(p).getName());
 							}
 
-						}, 20);
+						}.runTaskLater(PrivateTalk.instance, 20);
 					}
 				}
 				if (args.length == 2) {
