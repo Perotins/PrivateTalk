@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.perotin.privatetalk.commands.PrivateTalkCMD;
+import me.perotin.privatetalk.commands.CommandPrivateTalk;
 
 public class PrivateTalk extends JavaPlugin implements Listener {
 
@@ -35,8 +35,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 		}
 
 		convos = new ArrayList<>();
-		getCommand("pt").setExecutor(new PrivateTalkCMD());
-		getCommand("privatetalk").setExecutor(new PTCatcher());
+		getCommand("privatetalk").setExecutor(new CommandPrivateTalk());
 		Bukkit.getPluginManager().registerEvents(new Speak(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerQuitConvo(), this);
 		Bukkit.getPluginManager().registerEvents(this, this);

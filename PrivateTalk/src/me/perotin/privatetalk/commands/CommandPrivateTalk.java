@@ -14,7 +14,7 @@ import me.perotin.privatetalk.Conversation;
 import me.perotin.privatetalk.PlayerLeaveConversationEvent;
 import me.perotin.privatetalk.PrivateTalk;
 
-public class PrivateTalkCMD implements CommandExecutor {
+public class CommandPrivateTalk implements CommandExecutor {
 
 	HashMap<Player, Conversation> invites = new HashMap<>();
 
