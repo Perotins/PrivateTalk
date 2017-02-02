@@ -14,8 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.perotin.privatetalk.commands.CommandPrivateTalk;
 import me.perotin.privatetalk.event.PlayerLeaveConversationEvent;
-import me.perotin.privatetalk.event.PlayerQuitConvo;
-import me.perotin.privatetalk.event.Speak;
+import me.perotin.privatetalk.event.PlayerListener;
 
 public class PrivateTalk extends JavaPlugin implements Listener {
 
@@ -31,15 +30,17 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		instance = this;
-		
+
 		// Load all data when the plugin loads
 		reload();
 
+		// Register command and event handlers
 		getCommand("privatetalk").setExecutor(new CommandPrivateTalk());
-		Bukkit.getPluginManager().registerEvents(new Speak(), this);
-		Bukkit.getPluginManager().registerEvents(new PlayerQuitConvo(), this);
+
+		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 
+		// Start cleaner task
 		new BukkitRunnable() {
 
 			@Override
@@ -57,6 +58,7 @@ public class PrivateTalk extends JavaPlugin implements Listener {
 
 	@Override
 	public void onDisable() {
+		// Clean instance
 		instance = null;
 	}
 
