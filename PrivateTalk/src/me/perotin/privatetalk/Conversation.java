@@ -44,7 +44,7 @@ public class Conversation {
 				getMembers().remove(p);
 			}
 		}
-		PrivateTalk.priv.convos.remove(this);
+		PrivateTalk.instance.convos.remove(this);
 	}
 	public void setPublic(Boolean b){
 		isPublic = b;
@@ -67,7 +67,7 @@ public class Conversation {
 		members.remove(p.getUniqueId());
 	}
 	public static Conversation getConversation(Player player){
-		for(Conversation c : PrivateTalk.priv.convos){
+		for(Conversation c : PrivateTalk.instance.convos){
 			if(c.playerInConversation(player)){
 				return c;
 			}else{
@@ -77,7 +77,7 @@ public class Conversation {
 		return null;
 	}
 	public static Conversation getConversation(String name){
-		for(Conversation con : PrivateTalk.priv.convos){
+		for(Conversation con : PrivateTalk.instance.convos){
 			if(con.getName().equalsIgnoreCase(name)){
 				return con;
 			}else return null;

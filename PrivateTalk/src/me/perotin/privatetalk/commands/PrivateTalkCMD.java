@@ -43,13 +43,13 @@ public class PrivateTalkCMD implements CommandExecutor {
 		}
 		if(args[0].equalsIgnoreCase("list")){
 			String msg = "";
-			if(PrivateTalk.priv.convos.size() >= 1){
-				for(int i = 0; i < PrivateTalk.priv.convos.size(); i++){
-					msg += ChatColor.GREEN + PrivateTalk.priv.convos.get(i).getName() + ChatColor.WHITE+", ";
+			if(PrivateTalk.instance.convos.size() >= 1){
+				for(int i = 0; i < PrivateTalk.instance.convos.size(); i++){
+					msg += ChatColor.GREEN + PrivateTalk.instance.convos.get(i).getName() + ChatColor.WHITE+", ";
 					msg.trim();
 
 				}
-				p.sendMessage(ChatColor.WHITE + "Conversations ("+ChatColor.GREEN  + PrivateTalk.priv.convos.size()+ChatColor.WHITE+") : "+ msg);
+				p.sendMessage(ChatColor.WHITE + "Conversations ("+ChatColor.GREEN  + PrivateTalk.instance.convos.size()+ChatColor.WHITE+") : "+ msg);
 
 			}else{
 				p.sendMessage(ChatColor.WHITE + "Conversations : " + ChatColor.GREEN + "No current conversations :(");
@@ -110,7 +110,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 			}
 		}
 		if(args[0].equalsIgnoreCase("leave")){
-			for(Conversation c : PrivateTalk.priv.convos){
+			for(Conversation c : PrivateTalk.instance.convos){
 				if(!c.playerInConversation(p)){
 					p.sendMessage(ChatColor.RED + "You are not in any conversations!");
 					return true;
@@ -125,17 +125,17 @@ public class PrivateTalkCMD implements CommandExecutor {
 				}
 			}
 		}else if(args[0].equalsIgnoreCase("toggle")){
-			for(Conversation c : PrivateTalk.priv.convos){
+			for(Conversation c : PrivateTalk.instance.convos){
 				if(!c.playerInConversation(p)){
 					p.sendMessage(ChatColor.YELLOW + "You are not in any chats!");
 					return true;
 				}else{
-					if(PrivateTalk.priv.toggle.containsKey(p.getUniqueId().toString())){
-						PrivateTalk.priv.toggle.remove(p.getUniqueId().toString());
+					if(PrivateTalk.instance.toggle.containsKey(p.getUniqueId().toString())){
+						PrivateTalk.instance.toggle.remove(p.getUniqueId().toString());
 						p.sendMessage(ChatColor.YELLOW + "Toggle chat set to " + ChatColor.RED + "off");
 						return true;
 					}else{
-						PrivateTalk.priv.toggle.put(p.getUniqueId().toString(), c);
+						PrivateTalk.instance.toggle.put(p.getUniqueId().toString(), c);
 						p.sendMessage(ChatColor.YELLOW + "Toggle chat set to " + ChatColor.GREEN + "on");
 						return true;
 
@@ -149,7 +149,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 			if(args.length != 2 && args.length != 3){
 				p.sendMessage(ChatColor.RED + "/pt create <name>");
 			}
-			for(Conversation c : PrivateTalk.priv.convos){
+			for(Conversation c : PrivateTalk.instance.convos){
 				if(c == null){
 					return true;
 				}
@@ -171,7 +171,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 				p.sendMessage(ChatColor.WHITE + "Conversation " + ChatColor.GREEN + convoName + ChatColor.WHITE +" - "+ChatColor.GREEN+"OWNER ("+
 						ChatColor.WHITE +p.getName()+ChatColor.GREEN +") PUBLIC ("+ChatColor.WHITE +"false"+ChatColor.GREEN + ")");
 				Conversation convo =  new Conversation(p, convoName, false);
-				PrivateTalk.priv.convos.add(convo);
+				PrivateTalk.instance.convos.add(convo);
 				convo.add(p);
 
 			}else if(args.length == 3){
@@ -181,7 +181,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 					return true;
 				}
 				Conversation convo =new Conversation(p, convoName, false);
-				PrivateTalk.priv.convos.add(convo);
+				PrivateTalk.instance.convos.add(convo);
 				convo.add(p);
 				p.sendMessage(ChatColor.WHITE + "Conversation " + ChatColor.GREEN + convoName + ChatColor.WHITE +" - "+ChatColor.GREEN+"OWNER ("+
 						ChatColor.WHITE +p.getName()+ChatColor.GREEN +") PUBLIC ("+ChatColor.WHITE +"false"+ChatColor.GREEN + ")");
@@ -237,7 +237,7 @@ public class PrivateTalkCMD implements CommandExecutor {
 						for(Player t : Conversation.getConversation(p).getMembers()){
 							t.sendMessage(ChatColor.GREEN + p.getName() + ChatColor.YELLOW + " is closing shop. Come again!");
 						}
-						Bukkit.getScheduler().scheduleSyncDelayedTask(PrivateTalk.priv, new Runnable(){
+						Bukkit.getScheduler().scheduleSyncDelayedTask(PrivateTalk.instance, new Runnable(){
 
 							@Override
 							public void run() {

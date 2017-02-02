@@ -11,9 +11,9 @@ public class Speak implements Listener {
 	@EventHandler
 	public void chatInParty(AsyncPlayerChatEvent e){
 		Player p = e.getPlayer();
-		String msg = PrivateTalk.priv.getConfig().getString("party-message-format");
-		for (Conversation c : PrivateTalk.priv.convos) {
-			if(!PrivateTalk.priv.toggle.containsKey(p.getUniqueId().toString())){
+		String msg = PrivateTalk.instance.getConfig().getString("party-message-format");
+		for (Conversation c : PrivateTalk.instance.convos) {
+			if(!PrivateTalk.instance.toggle.containsKey(p.getUniqueId().toString())){
 
 			if(c.getMembers().contains(p)){
 					if(e.getMessage().startsWith("@")){
@@ -29,8 +29,8 @@ public class Speak implements Listener {
 					}
 				}
 			}
-			else if(PrivateTalk.priv.toggle.containsKey(p.getUniqueId().toString())) {
-				Conversation c2 = PrivateTalk.priv.toggle.get(p.getUniqueId().toString());
+			else if(PrivateTalk.instance.toggle.containsKey(p.getUniqueId().toString())) {
+				Conversation c2 = PrivateTalk.instance.toggle.get(p.getUniqueId().toString());
 				e.setCancelled(true);
 				String m =msg.replaceAll("%CONVERSATION%", c2.getName());
 				String m2 =m.replaceAll("%PLAYER%", p.getName());
