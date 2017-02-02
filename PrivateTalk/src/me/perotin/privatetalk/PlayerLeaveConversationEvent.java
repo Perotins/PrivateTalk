@@ -2,20 +2,23 @@ package me.perotin.privatetalk;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
-public class PlayerLeaveConversationEvent extends Event implements Cancellable {
-
-	Boolean isCancelled = false;
+public class PlayerLeaveConversationEvent extends PlayerEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
-	Player leaving;
-	Conversation leavingFrom;
+	private boolean cancelled = false;
 
-	public PlayerLeaveConversationEvent(Player p, Conversation c) {
-		leaving = p;
-		leavingFrom = c;
+	private Conversation conversation;
+
+	public PlayerLeaveConversationEvent(Player player, Conversation conversation) {
+		super(player);
+		this.conversation = conversation;
+	}
+
+	public Conversation getConversation() {
+		return conversation;
 	}
 
 	@Override
@@ -29,20 +32,11 @@ public class PlayerLeaveConversationEvent extends Event implements Cancellable {
 
 	@Override
 	public boolean isCancelled() {
-		return isCancelled;
+		return cancelled;
 	}
 
 	@Override
-	public void setCancelled(boolean arg0) {
-		isCancelled = arg0;
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
 	}
-
-	public Player getPlayer() {
-		return leaving;
-	}
-
-	public Conversation getConversation() {
-		return leavingFrom;
-	}
-
 }
