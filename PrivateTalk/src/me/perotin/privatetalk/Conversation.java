@@ -27,6 +27,9 @@ public class Conversation {
 	public String getName(){
 		return name;
 	}
+	public int size(){
+		return members.size();
+	}
 	public Boolean isPublic(){
 		return isPublic;
 	}
@@ -39,8 +42,10 @@ public class Conversation {
 		return null;
 	}
 	public void delete(){
-		for(Player p : getMembers()){
-			remove(p);
+		if(getMembers() != null){
+			for(Player p : getMembers()){
+				getMembers().remove(p);
+			}
 		}
 		PrivateTalk.priv.convos.remove(this);
 	}

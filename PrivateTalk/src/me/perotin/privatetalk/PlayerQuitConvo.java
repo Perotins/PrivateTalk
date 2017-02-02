@@ -16,7 +16,8 @@ public class PlayerQuitConvo implements Listener {
 		if(c == null){
 			return;
 		}
-		if(c.getMembers().size() == 0){
+		
+		if(c.getMembers() == null){
 			c.delete();
 			c = null;
 
@@ -26,7 +27,7 @@ public class PlayerQuitConvo implements Listener {
 			Player owner =  e.getPlayer();
 			owner.sendMessage("fired");
 			// player leaving is owner, making a random player the new owner
-			if(c.getOwner().getName().equals(owner.getName())){
+			if(c.getOwner().getName().equals(owner.getName()) && c.size() > 1){
 				int random = new Random().nextInt(c.getMembers().size());
 				Player newOwner = c.getMembers().get(random);
 				c.setOwner(newOwner);

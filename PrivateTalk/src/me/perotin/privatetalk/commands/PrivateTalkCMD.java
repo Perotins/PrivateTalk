@@ -112,15 +112,15 @@ public class PrivateTalkCMD implements CommandExecutor {
 		if(args[0].equalsIgnoreCase("leave")){
 			for(Conversation c : PrivateTalk.priv.convos){
 				if(!c.playerInConversation(p)){
-					p.sendMessage(ChatColor.RED + "You are not in any talks!");
+					p.sendMessage(ChatColor.RED + "You are not in any conversations!");
 					return true;
 				}else{
-					c.getMembers().remove(p);
+					c.remove(p);
 
 					PlayerLeaveConversationEvent e = new PlayerLeaveConversationEvent(p, c);
 					Bukkit.getServer().getPluginManager().callEvent(e);
 
-					p.sendMessage(ChatColor.YELLOW + "Successfully left " + ChatColor.WHITE + c.getName() + ChatColor.YELLOW + "!");
+					p.sendMessage(ChatColor.YELLOW + "Successfully left " + ChatColor.RED + c.getName() + ChatColor.YELLOW + "!");
 					return true;
 				}
 			}
