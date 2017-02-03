@@ -1,0 +1,10 @@
+# .settings, .classpath, etc.
+*/.classpath
+*/.project
+*/.settings
+
+# Compiled files
+*/bin
+*/output
+*.class
+*.jar

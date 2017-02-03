@@ -1,6 +1,5 @@
 package me.perotin.privatetalk;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,110 +10,120 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import me.perotin.privatetalk.commands.PrivateTalkCMD;
+import me.perotin.privatetalk.commands.CommandPrivateTalk;
+import me.perotin.privatetalk.event.PlayerLeaveConversationEvent;
+import me.perotin.privatetalk.event.PlayerListener;
 
-public class PrivateTalk extends JavaPlugin implements Listener{
+public class PrivateTalk extends JavaPlugin implements Listener {
 
+	public static PrivateTalk instance;
 
-	/*
-	 * 
-	 */
-	public static PrivateTalk priv;
+	public HashMap<String, Conversation> toggle = new HashMap<>();
+	private HashMap<String, Conversation> toRemove = new HashMap<>();
 
-	public HashMap<String, Conversation>toggle = new HashMap<>();
+	public ArrayList<Conversation> convos = new ArrayList<>();
 
-	 
-	 public ArrayList<Conversation>convos;
-	 Integer timeToKick = getConfig().getInt("time-to-join-back");
-	 HashMap<String, Conversation>toRemove = new HashMap<>();
-	@SuppressWarnings("deprecation")
+	private int timeToKick;
+
 	@Override
-	public void onEnable(){
-		if(timeToKick == null || timeToKick < 1){
-			getLogger().severe("Config is not set up properly! Make sure you insert a positive digit in (time-to-join-back)");
-			timeToKick = 5;
-		}
-		
-		convos = new ArrayList<>();
-		priv = this;
-		getCommand("pt").setExecutor(new PrivateTalkCMD());
-		getCommand("privatetalk").setExecutor(new PTCatcher());
-		Bukkit.getPluginManager().registerEvents(new Speak(), this);
-		Bukkit.getPluginManager().registerEvents(new PlayerQuitConvo(), this);
+	public void onEnable() {
+		instance = this;
+
+		// Load all data when the plugin loads
+		reload();
+
+		// Register command and event handlers
+		getCommand("privatetalk").setExecutor(new CommandPrivateTalk());
+
+		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
 		Bukkit.getPluginManager().registerEvents(this, this);
-		saveConfig();
-		Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable(){
+
+		// Start cleaner task
+		new BukkitRunnable() {
 
 			@Override
 			public void run() {
-				for(Conversation c : convos){
-					if(c.getMembers().size() == 0){
+				for (Conversation c : convos) {
+					if (c.getMembers().size() == 0) {
 						c.delete();
 					}
 				}
 			}
-			
-		}, 0, 20*60*10);
 
+		}.runTaskTimer(this, 0, 20 * 60 * 10);
 
 	}
-	public void saveConfig(){
-		if(!new File(getDataFolder(), "config.yml").exists()){
-			saveDefaultConfig();
-		}else{
-			return;
+
+	@Override
+	public void onDisable() {
+		// Clean instance
+		instance = null;
+	}
+
+	private void reload() {
+		// Ensure the config file is saved to the plugins folder
+		saveDefaultConfig();
+
+		// Refresh from disk
+		reloadConfig();
+
+		timeToKick = getConfig().getInt("time-to-join-back");
+
+		if (timeToKick < 1) {
+			getLogger().severe("Config is not set up properly! Make sure you insert a positive digit in (time-to-join-back)");
+			timeToKick = 5;
 		}
+
 	}
 
 	@EventHandler
-	public void onJoin(PlayerJoinEvent e){
+	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+		new BukkitRunnable() {
 
 			@Override
 			public void run() {
 				if (toRemove.containsKey(p.getUniqueId().toString())) {
 					toRemove.remove(p.getUniqueId().toString());
 					p.sendMessage("joined in time");
-				}else{
+				} else {
 					p.sendMessage("fired1");
 				}
-				
+
 			}
-			
-		}, 20*3);
-				
-			}
-		
-	
+
+		}.runTaskLater(this, 20 * 3);
+
+	}
+
 	@EventHandler
-	public void onLeave(PlayerQuitEvent e){
+	public void onLeave(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
-		for(Conversation c : convos){
-			if(!c.playerInConversation(p))return;
-			else{
-				
+		for (Conversation c : convos) {
+			if (!c.playerInConversation(p)) return;
+			else {
+
 				toRemove.put(p.getUniqueId().toString(), c);
 				Bukkit.broadcastMessage(toRemove.containsKey(p) + ".");
-				Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+				new BukkitRunnable() {
 
 					@Override
 					public void run() {
 						if (toRemove.containsKey(p.getUniqueId().toString())) {
-							if (new Conversation().getConversation(p).playerInConversation(p)) {
+							if (Conversation.getConversation(p).playerInConversation(p)) {
 								toRemove.remove(p);
 								Bukkit.getPluginManager().callEvent(new PlayerLeaveConversationEvent(p, toRemove.get(p)));
 								c.remove(p);
-								Bukkit.broadcastMessage("removed offline player"); 
+								Bukkit.broadcastMessage("removed offline player");
 							}
 						}
 					}
 
-				}, 20* 60*0);
+				}.runTaskLater(this, 20 * 60 * 0);
 			}
 		}
 	}
-
 
 }
