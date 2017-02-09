@@ -1,12 +1,7 @@
-# PrivateTalk v1.0 configuration file
+# Welcome to the PrivateTalk v1.0 configuration file!
 
-#   %CONVERSATION% = Name of conversation they are in
-#   %PLAYER% = Player's name
-#   &MESSAGE% = Player's message
-party-message-format: "&d[%CONVERSATION%] &7%PLAYER% ≫ &d%MESSAGE%"
+# format of party-chat messages
+party-chat-format: "&e[%CONVERSATION%] &7%PLAYER% ≽ &e%MESSAGE%"
 
-#This is the amount of time in minutes that an user who leaves the server 
-#in a party can join back, if this time expires then they are removed from the party!
-
-time-to-join-back: 5
-
+# time in minutes that offline players in conversations should be removed
+time-to-kick: 5
